@@ -1,0 +1,8 @@
+Jan 15 13:49:59 proxy dhcpd: DHCPACK on 192.168.0.23 to 00:80:ad:01:7e:12 (programming) via eth1
+Jan 15 13:54:45 proxy dhcpd: DHCPINFORM from 192.168.0.13 via eth1: not authoritative for subnet 192.168.0.0
+Jan 15 13:54:48 proxy dhcpd: DHCPINFORM from 192.168.0.13 via eth1: not authoritative for subnet 192.168.0.0
+Jan 15 13:58:29 proxy dhcpd: DHCPINFORM from 192.168.0.15 via eth1: not authoritative for subnet 192.168.0.0
+Jan 15 13:58:32 proxy dhcpd: DHCPINFORM from 192.168.0.15 via eth1: not authoritative for subnet 192.168.0.0
+Jan 15 14:09:22 proxy dhcpd: Unable to add forward map from mach1.jepoy.net to 192.168.0.10: timed out
+Jan 15 14:09:22 proxy dhcpd: DHCPREQUEST for 192.168.0.10 from 00:40:05:6d:7c:a2 via eth1
+Jan 15 14:09:22 proxy dhcpd: DHCPACK on 192.168.0.10 to 00:40:05:6d:7c:a2 via eth
