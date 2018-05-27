@@ -1,44 +1,10 @@
 #!/usr/bin/python
 import re
-import sys, getopt
+from argparse import ArgumentParser
 
-#import pandas as pd
+def parse(filename, mac_address):
 
-def main(argv):
-   mac_address = "00:00:00:00:00:00"
-   try:
-      opts, args = getopt.getopt(argv,"hm::",["mac-address="])
-   except getopt.GetoptError:
-      print 'test.py -m <mac-address>'
-      sys.exit(2)
-   for opt, arg in opts:
-      if opt == '-h':
-         print 'test.py -m <mac-address>'
-         sys.exit()
-      elif opt in ("-m", "--mac-address"):
-         mac_address = arg
-   filepath = 'scratch.txt'
-   data = parse(filepath, mac_address)
-   print(data)
-
-def parse(filepath,mac_address):
-    """
-    Parse text at given filepath
-
-    Parameters
-    ----------
-    filepath : str
-        Filepath for file to be parsed
-    mac_address: str
-        Filepath for file to be parsed
-    Returns
-    -------
-    data : []
-
-    """
-
-    data = []
-    with open(filepath, 'r') as file:
+    with open(filename, 'r') as file:
         line = file.readline()
         dhcpack_counter = 0
         dhcprequest_counter = 0
@@ -58,7 +24,7 @@ def parse(filepath,mac_address):
             line = file.readline()
 
         dict_of_data = {
-            'MAC ADDRESS': "00:40:05:6d:7c:a2",
+            'MAC ADDRESS': mac_address,
             'DHCPACK': dhcpack_counter,
             'DHCPREQUEST': dhcprequest_counter,
         }
@@ -85,4 +51,13 @@ class _RegExLib:
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    mac_address = "00:00:00:00:00:00"
+    parser = ArgumentParser(description="UVA Exam, parse MAC Address log file")
+    parser.add_argument("--mac-address", dest="macAddress", default="00:00:00:00:00:00",
+                        help="Address to be used as filter")
+    parser.add_argument("--file", dest="filename", required=True,
+                        help="input file with MAC logfiles")
+    args = parser.parse_args()
+
+    data = parse(args.filename, args.macAddress)
+    print(data)
