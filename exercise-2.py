@@ -4,32 +4,38 @@ from argparse import ArgumentParser
 
 def parse(filename, mac_address):
 
-    with open(filename, 'r') as file:
-        line = file.readline()
-        dhcpack_counter = 0
-        dhcprequest_counter = 0
-        while line:
-            word_list = line.split()
+    reg_match = _RegExLib(mac_address)
+    if  not reg_match.mac_address:
+       return "Wrong argument"
 
-            if "DHCPACK" in word_list[5]:
-                reg_match = _RegExLib(word_list[9])
-                if mac_address in reg_match.mac_address.group():
-                    dhcpack_counter = dhcpack_counter + 1
-
-            if "DHCPREQUEST" in word_list[5]:
-                reg_match = _RegExLib(word_list[9])
-                if mac_address in reg_match.mac_address.group():
-                    dhcprequest_counter = dhcprequest_counter + 1
-
+    try:
+        with open(filename, 'r') as file:
             line = file.readline()
+            dhcpack_counter = 0
+            dhcprequest_counter = 0
+            while line:
+                word_list = line.split()
 
-        dict_of_data = {
-            'MAC ADDRESS': mac_address,
-            'DHCPACK': dhcpack_counter,
-            'DHCPREQUEST': dhcprequest_counter,
-        }
-    return dict_of_data
+                if "DHCPACK" in word_list[5]:
+                    reg_match = _RegExLib(word_list[9])
+                    if mac_address in reg_match.mac_address.group():
+                        dhcpack_counter = dhcpack_counter + 1
 
+                if "DHCPREQUEST" in word_list[5]:
+                    reg_match = _RegExLib(word_list[9])
+                    if mac_address in reg_match.mac_address.group():
+                        dhcprequest_counter = dhcprequest_counter + 1
+
+                line = file.readline()
+
+            dict_of_data = {
+                'MAC ADDRESS': mac_address,
+                'DHCPACK': dhcpack_counter,
+                'DHCPREQUEST': dhcprequest_counter,
+            }
+        return dict_of_data
+    except IOError:
+        print "Error opening ", filename
 
 class _RegExLib:
     """Set up regular expressions"""
@@ -51,7 +57,6 @@ class _RegExLib:
 
 
 if __name__ == '__main__':
-    mac_address = "00:00:00:00:00:00"
     parser = ArgumentParser(description="UVA Exam, parse MAC Address log file")
     parser.add_argument("--mac-address", dest="macAddress", default="00:00:00:00:00:00",
                         help="Address to be used as filter")
